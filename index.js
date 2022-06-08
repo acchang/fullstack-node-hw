@@ -61,8 +61,7 @@ response.status(204).end()
 
 const generateId = () => {
     const randomId = persons.length > 0
-    ? Math.random(1000)
-    //   ? Math.max(...persons.map(n => n.id))
+    ? Math.floor(Math.random() * 10000)
       : 0
     return randomId
 }
@@ -77,26 +76,28 @@ app.post('/api/persons', (request, response) => {
         })
       }
     
+    if (!body.number) {
+        return response.status(400).json({ 
+          error: 'content missing' 
+        })
+      }
+
+    if (persons.some(entry => entry.name === body.name)) {
+    return response.status(400).json({ 
+            error: 'name must be unique' 
+        })
+      }
+    
       const person = {
-        name: body.name,
-        number: body.number || null,
         id: generateId(),
+        name: body.name,
+        number: body.number
       }
     
       persons = persons.concat(person)
     
       response.json(person)
     })
-//     const person = request.body
-//     person.id = randomId
-//     console.log(person)
-
-//     person = persons.concat(person)
-
-//     response.json(person)
-
-//   })
-
 
 const PORT = 3001
 app.listen(PORT)
