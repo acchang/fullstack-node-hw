@@ -1,6 +1,8 @@
 const http = require('http')
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
+const PORT = 3001
 
 let persons = [
     { 
@@ -26,6 +28,7 @@ let persons = [
 ]
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>')
@@ -99,6 +102,6 @@ app.post('/api/persons', (request, response) => {
       response.json(person)
     })
 
-const PORT = 3001
+
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
